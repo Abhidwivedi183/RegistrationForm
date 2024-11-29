@@ -14,6 +14,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 
 const bcrypt = require("bcryptjs");
+const cookieparser = require("cookie-parser");
+app.use(cookieparser());
 
 // const securepassword = async (password)=>{
 //     //this convert normal password to hash value
@@ -83,6 +85,8 @@ app.post("/login", async(req,res)=>{
 //another way
 const s = new guest(req.body);
 const token = await s.generateToken();
+res.cookie("jwt",token,{expires:new Date(Date.now() + 3000)   , httpOnly:true});
+console.log(req.cookies.jwt);
     const g = await s.save();
    
     console.log(token);
